@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from bson.objectid import ObjectId
+from pymongo.collection import Collection
 from pymongo.database import Database
 
 from ..utils.security import hash_password
@@ -34,3 +35,7 @@ class AuthRepository:
             }
         )
         return user
+
+    def update_user_data(self, user_id: str, data: dict):
+        user_collection: Collection = self.database["users"]
+        user_collection.update_one({"_id": ObjectId(user_id)}, {"$set": data})
